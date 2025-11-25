@@ -63,9 +63,40 @@ ul li{
  font-size:0.8rem;
  opacity:0.8;
 }
+ .bg-strip{
+ position:fixed;
+ top:0;
+ width:220px;
+ z-index:-1;
+ display:none;
+}
+.bg-strip-left{left:0;}
+.bg-strip-right{right:0;}
+.bg-tile{
+ width:200px;
+ height:200px;
+ background-position:center;
+ background-size:cover;
+ background-repeat:no-repeat;
+}
+@media (min-width:992px){
+ body{
+  padding-left:240px;
+  padding-right:240px;
+ }
+ .bg-strip{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+ }
+}
+
 </style>
 </head>
 <body>
+ <div class="bg-strip bg-strip-left"></div>
+<div class="bg-strip bg-strip-right"></div>
+
 <div class="container">
  <div class="row justify-content-center">
   <div class="col-md-10 col-lg-8">
@@ -115,5 +146,29 @@ ul li{
  </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+ <script>
+const sgrprfBgImages=[
+ "bg-images/2025-11-25-SUGARPROOF-hal-and-rich-bw-double-exposure.png",
+ "bg-images/2025-11-25-SUGARPROOF-sugarproof-hexD19-bw-double-exposure.png"
+];
+function buildBgStrips(){
+ const strips=document.querySelectorAll(".bg-strip");
+ if(!strips.length||!sgrprfBgImages.length)return;
+ const tilesNeeded=Math.ceil(window.innerHeight/200)+2;
+ strips.forEach(strip=>{
+  strip.innerHTML="";
+  for(let i=0;i<tilesNeeded;i++){
+   const tile=document.createElement("div");
+   tile.className="bg-tile";
+   const imgIndex=i%sgrprfBgImages.length;
+   tile.style.backgroundImage="url('"+sgrprfBgImages[imgIndex]+"')";
+   strip.appendChild(tile);
+  }
+ });
+}
+window.addEventListener("load",buildBgStrips);
+window.addEventListener("resize",buildBgStrips);
+</script>
+
 </body>
 </html>
